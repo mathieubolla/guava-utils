@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -36,6 +37,26 @@ public class FluentParallelIterableTest {
 		}, 2);
 
 		assertThat(parallelPositives).containsOnly(1, 2);
+	}
+
+	@Test(timeout = 200)
+	public void shouldKeepFlowingWithMoreTasksThanThreads() {
+		FluentParallelIterable<Integer> fluentParallelIterable = FluentParallelIterable.from(Arrays.asList(1, 2, 3, 4, 5, 6));
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+		FluentIterable<Integer> parallelCostlyIdentity = fluentParallelIterable.
+			parallelTransform(new Function<Integer, Integer>() {
+				public Integer apply(Integer input) {
+					return input * 2;
+				}
+			}, 2, executorService)
+			.parallelTransform(new Function<Integer, Integer>() {
+				public Integer apply(Integer input) {
+					return input / 2;
+				}
+			}, 2, executorService);
+
+		assertThat(parallelCostlyIdentity).containsOnly(1, 2, 3, 4, 5, 6);
 	}
 
 	@Test(timeout = 200)
