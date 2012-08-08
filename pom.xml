@@ -10,6 +10,31 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>guava-utils</name>
 
+	<repositories>
+		<repository>
+			<id>maven-mathieu-bolla-com-s3-release-repo</id>
+			<name>www.mathieu-bolla.com S3 Release Repository</name>
+			<url>s3://www.mathieu-bolla.com/maven/release</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>maven-mathieu-bolla-com-s3-snapshot-repo</id>
+			<name>www.mathieu-bolla.com S3 Snapshot Repository</name>
+			<url>s3://www.mathieu-bolla.com/maven//snapshot</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -30,4 +55,27 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<extensions>
+			<extension>
+				<groupId>org.springframework.build.aws</groupId>
+				<artifactId>org.springframework.build.aws.maven</artifactId>
+				<version>3.0.0.RELEASE</version>
+			</extension>
+		</extensions>
+	</build>
+
+	<distributionManagement>
+		<repository>
+			<id>maven-mathieu-bolla-com-s3-release-repo</id>
+			<name>S3 Release Repository</name>
+			<url>s3://www.mathieu-bolla.com/maven/release</url>
+		</repository>
+		<snapshotRepository>
+			<id>maven-mathieu-bolla-com-s3-snapshot-repo</id>
+			<name>S3 Snapshot Repository</name>
+			<url>s3://www.mathieu-bolla.com/maven/snapshot</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>
