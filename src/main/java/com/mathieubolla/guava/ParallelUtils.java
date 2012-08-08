@@ -16,7 +16,7 @@ public class ParallelUtils {
 
 	/**
 	 * Computes transform on source, factor elements at a time, and iterates over these in source order, tapping into executorService threadPool
-	 * BEWARE: executorService should be truly parallel,
+	 * BEWARE: executorService should be truly parallel, i.e. should work with at least 2 threads
 	 * @param source
 	 * @param transform
 	 * @param factor
