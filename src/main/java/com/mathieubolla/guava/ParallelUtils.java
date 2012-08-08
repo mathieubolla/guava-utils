@@ -40,19 +40,18 @@ public class ParallelUtils {
 		return doStuf(source, transform, factor, executorService, false);
 	}
 
-	private static <T, U> Iterable<U> doStuf(Iterable<T> source, final Function<T, U> transform, int factor, final ExecutorService executorService, final boolean shutdownInTheEnd) {
+	private static <T, U> Iterable<U> doStuf(final Iterable<T> source, final Function<T, U> transform, int factor, final ExecutorService executorService, final boolean shutdownInTheEnd) {
 		final LinkedBlockingQueue<FutureTask<U>> queue = new LinkedBlockingQueue<FutureTask<U>>((factor - 1) * 2);
 		final AtomicBoolean finished = new AtomicBoolean(false);
-		final Iterator<T> sourceIterator = source.iterator();
 
 		return new Iterable<U>() {
 			public Iterator<U> iterator() {
 				executorService.submit(new Runnable() {
 					public void run() {
-						if (sourceIterator.hasNext()) {
+						for (final T input : source) {
 							FutureTask<U> scheduledFuture = new FutureTask<U>(new Callable<U>() {
 								public U call() throws Exception {
-									return transform.apply(sourceIterator.next());
+									return transform.apply(input);
 								}
 							});
 							try {
@@ -61,9 +60,9 @@ public class ParallelUtils {
 							} catch (InterruptedException e) {
 								e.printStackTrace();
 							}
-						} else {
-							finished.set(true);
+
 						}
+						finished.set(true);
 					}
 				});
 
