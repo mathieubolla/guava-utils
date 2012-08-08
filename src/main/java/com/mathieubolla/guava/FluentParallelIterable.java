@@ -14,6 +14,10 @@ public abstract class FluentParallelIterable<E> extends FluentIterable<E> {
 	}
 
 	public static <E> FluentParallelIterable<E> from(final Iterable<E> source) {
+		if (source instanceof FluentParallelIterable) {
+			return (FluentParallelIterable<E>)source;
+		}
+
 		return new FluentParallelIterable<E>(source) {
 			public Iterator<E> iterator() {
 				return source.iterator();
