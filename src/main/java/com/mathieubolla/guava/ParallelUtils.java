@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ParallelUtils {
 	public static <T, U> Iterable<U> parallelTransform(final Iterable<T> source, final Function<T, U> transform, int factor) {
 		ExecutorService executorService = Executors.newFixedThreadPool(factor);
-		return parallelTransform(source, transform, factor, executorService);
+		return doStuf(source, transform, factor, executorService, true);
 	}
 
 	/**
@@ -26,6 +26,10 @@ public class ParallelUtils {
 	 * @return
 	 */
 	public static <T, U> Iterable<U> parallelTransform(final Iterable<T> source, final Function<T, U> transform, int factor, final ExecutorService executorService) {
+		return doStuf(source, transform, factor, executorService, false);
+	}
+
+	private static <T, U> Iterable<U> doStuf(Iterable<T> source, final Function<T, U> transform, int factor, final ExecutorService executorService, final boolean shutdownInTheEnd) {
 		final LinkedBlockingQueue<FutureTask<U>> queue = new LinkedBlockingQueue<FutureTask<U>>((factor - 1) * 2);
 		final AtomicBoolean finished = new AtomicBoolean(false);
 		final Iterator<T> sourceIterator = source.iterator();
@@ -56,6 +60,9 @@ public class ParallelUtils {
 					@Override
 					protected U computeNext() {
 						if (queue.isEmpty() && finished.get()) {
+							if (shutdownInTheEnd) {
+								executorService.shutdown();
+							}
 							return endOfData();
 						}
 						try {
