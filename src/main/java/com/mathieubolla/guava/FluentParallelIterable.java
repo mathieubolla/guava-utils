@@ -5,6 +5,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 
 import java.util.Iterator;
+import java.util.concurrent.ExecutorService;
 
 public abstract class FluentParallelIterable<E> extends FluentIterable<E> {
 	private final Iterable<E> delegate;
@@ -31,5 +32,13 @@ public abstract class FluentParallelIterable<E> extends FluentIterable<E> {
 
 	public final FluentParallelIterable<E> parallelFilter(Predicate<E> predicate, int factor) {
 		return from(ParallelUtils.parallelFilter(delegate, predicate, factor));
+	}
+
+	public final <T> FluentParallelIterable<T> parallelTransform(Function<E, T> function, int factor, ExecutorService executorService) {
+		return from(ParallelUtils.parallelTransform(delegate, function, factor, executorService));
+	}
+
+	public final FluentParallelIterable<E> parallelFilter(Predicate<E> predicate, int factor, ExecutorService executorService) {
+		return from(ParallelUtils.parallelFilter(delegate, predicate, factor, executorService));
 	}
 }
