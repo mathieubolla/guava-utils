@@ -38,6 +38,6 @@ You can use our pre-built binaries using the following Maven repository:
 
 **Code sample**
 
-Lazily get each of {1!, 2!, 3!, 4!} which is a prime (fortunately, all of them), given FACTORIAL the factorial function Function<Integer, Integer> and IS_PRIME the prime predicate Predicate<Integer>, using 4 compute threads:
+Lazily get each of {1!, 2!, 3!, 4!} which is a prime (fortunately, only one of them), given FACTORIAL the factorial function Function<Integer, Integer> and IS_PRIME the prime predicate Predicate<Integer>, using 4 compute threads:
 
     FluentParallelIterable.from(Arrays.asList(1, 2, 3, 4)).parallelTransform(FACTORIAL, 4).parallelFilter(IS_PRIME, 4);
