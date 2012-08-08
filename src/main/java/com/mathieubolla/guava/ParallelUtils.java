@@ -9,6 +9,17 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ParallelUtils {
+	/**
+	 * @see #parallelTransform(Iterable, com.google.common.base.Function, int, java.util.concurrent.ExecutorService)
+	 * Will create a fixed thread pool executor service, and shut it down at iterator's end
+	 *
+	 * @param source
+	 * @param transform
+	 * @param factor
+	 * @param <T>
+	 * @param <U>
+	 * @return
+	 */
 	public static <T, U> Iterable<U> parallelTransform(final Iterable<T> source, final Function<T, U> transform, int factor) {
 		ExecutorService executorService = Executors.newFixedThreadPool(factor);
 		return doStuf(source, transform, factor, executorService, true);
