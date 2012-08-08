@@ -16,7 +16,7 @@ public class FluentParallelIterableTest {
 			public Integer apply(Integer input) {
 				return input * 2;
 			}
-		}, 3);
+		}, 2);
 
 		assertThat(parallelMultiply).containsOnly(2, 4, 6);
 	}
